@@ -7,7 +7,7 @@ class Timer():
     def __init__(self, master):
         self.master = master
         self.master.title("TIMER")
-        self.canvas = Custom_Canvas(self.master, bg="white", height=100, width=100)
+        self.canvas = Custom_Canvas(self.master, bg="#313332", height=200, width=400)
         self.time_variable = StringVar()
         self.hours = 0
         self.minutes = 0
@@ -15,8 +15,8 @@ class Timer():
         self.time_variable.set(f"0{self.hours}:0{self.minutes}:0{self.seconds}")
         self.my_font = Font(family = "Times New Roman", size=48)
         self.my_text_font = Font(family = "Helvetica", size=24)
-        self.timer_frame = Frame(self.master, bg="#313332")
-        self.timer_frame.pack(pady=10)
+        self.timer_frame = Frame(self.master, bg="#313332", padx=50)
+        self.timer_frame.pack(pady=10, padx=20)
         self.hours_frame = Frame(self.master, bg="#313332")
         self.hours_frame.pack(pady=5)
         self.minutes_frame = Frame(self.master, bg="#313332")
@@ -41,7 +41,10 @@ class Timer():
 
     def start_Time(self):  
         timer_time =  self.hours*3600 + self.minutes*60 + self.seconds
-        self.master.after(1000, self.edit_time_after, timer_time)
+        self.canvas.stop_timer = False
+        if timer_time > 0:
+            self.canvas.move_pointer(225, 5)
+            self.master.after(1000, self.edit_time_after, timer_time)
 
     def edit_time_after(self, time_in_seconds):
         if time_in_seconds > 0:
@@ -49,8 +52,8 @@ class Timer():
             self.convert_time(time_in_seconds)
             self.master.after(1000, self.edit_time_after, time_in_seconds)
         else: 
+            self.canvas.stop_timer = True
             messagebox.showinfo(message="TIME IS UP!")
-            
 
     def convert_time(self, seconds):
 
